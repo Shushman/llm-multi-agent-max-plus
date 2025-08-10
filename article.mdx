@@ -72,6 +72,22 @@ Though our numerical experiments were on simplified settings, they showed how we
 
 Collectively, these principles and practices can lead to a structured, scalable, and resilient multi-LLM architecture, suitable for both prototype development and production-scale deployments.
 
+## Two Illustrative Experiments
+
+| Experiment | What it shows |
+| --- | --- |
+| **Zero-shot instruction tuning:** multiple mid-tier LLMs generate candidate prompts for a budget model. A larger orchestrator chooses which pairs share messages and when to stop. | *Anytimeness* lets us get good solutions at each round and potentially improve on them. |
+| **Adaptive divide-and-conquer arithmetic:** an orchestrator faced with a long symbolic problem decides whether to think itself (costly) or spawn cheap binary-operation solvers and merge their answers. | Our workflow naturally discovers when to split and when to merge, and delivers partial results if interrupted. |
+
+Before diving into the case studies, a few practical notes:
+
+- **Reproducibility** A Colab notebook with our implementation and selected evaluations is [here](https://github.com/Shushman/jkg-shushman/blob/main/MultiAgentMaxPlusLLM.ipynb). The precise results are unlikely to be replicated, given several sources of randomness and variability (versions, models, prompt generation, and randomness on a given answer).
+- **DSPy under the hood** We build each agent as a [DSPy](dspy.ai) module that declares typed I/O signatures. DSPy then handles all LLM interactions, freeing us to focus on the coordination logic.
+- **Agent Definition** In the current LLM space, ‘agent’ has become a bit of a [suitcase word](https://alexvermeer.com/unpacking-suitcase-words/). Given the limited illustrative scope of our experiments, we must also take liberties with the word; anything we call an agent in our following experiments is just a [dspy.Module](https://dspy.ai/learn/programming/modules/), wrapping an LLM. But the principles apply to the more rigorous production-relevant definition of agents, as LLM-based programs that need to use tools and solve multi-step tasks
+- **Evaluator is not an LLM** We implement the ‘Evaluator’ as a class for convenience, but it does not wrap an LLM; it just calls [dspy.Evaluate](https://dspy.ai/api/evaluation/Evaluate/) on the dev/test set as appropriate.
+
+
+
 ## Interactive System Visualization
 
 The visualization below demonstrates the dynamic coordination graph where agents collaborate to optimize instruction prompts. Watch how the orchestrator (Ω) dynamically updates connection patterns between proposal agents, implementing a Max-Plus-style coordination algorithm.
