@@ -60,6 +60,23 @@ Though our numerical experiments were on simplified settings, they showed how we
       <article className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden max-w-4xl mx-auto">
         <div className="article-content p-8 sm:p-12 font-crimson text-gray-800 text-lg leading-relaxed prose prose-lg max-w-none prose-headings:font-inter prose-headings:tracking-tight prose-h1:text-4xl prose-h1:lg:text-5xl prose-h1:font-bold prose-h1:mb-8 prose-h1:text-gray-900 prose-h2:text-2xl prose-h2:lg:text-3xl prose-h2:font-semibold prose-h2:mt-12 prose-h2:mb-6 prose-h2:pb-3 prose-h2:border-b prose-h2:border-gray-200 prose-h2:text-gray-800 prose-h3:text-xl prose-h3:lg:text-2xl prose-h3:font-semibold prose-h3:mt-8 prose-h3:mb-4 prose-h3:text-gray-700 prose-p:mb-6 prose-p:text-gray-700 prose-p:leading-relaxed prose-code:font-mono prose-code:bg-gray-100 prose-code:px-2 prose-code:py-1 prose-code:rounded-md prose-code:text-sm prose-code:font-medium prose-code:text-amber-700 prose-code:border prose-code:border-gray-200 prose-pre:bg-gray-900 prose-pre:rounded-xl prose-pre:my-8 prose-pre:shadow-lg prose-pre:code:block prose-pre:code:p-6 prose-pre:code:bg-transparent prose-pre:code:border-0 prose-pre:code:rounded-none prose-pre:code:text-sm prose-pre:code:leading-relaxed prose-pre:code:text-gray-200 prose-pre:code:font-normal prose-ul:my-6 prose-ul:pl-8 prose-ol:my-6 prose-ol:pl-8 prose-li:mb-3 prose-li:leading-relaxed prose-a:text-blue-600 prose-a:font-medium prose-a:no-underline prose-a:transition-colors prose-a:duration-200 hover:prose-a:text-blue-800 hover:prose-a:underline prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-6 prose-blockquote:my-8 prose-blockquote:italic prose-blockquote:text-gray-600 prose-blockquote:bg-slate-50 prose-blockquote:p-6 prose-blockquote:rounded-lg">
 
+
+## Mathematical Foundation
+
+The Max-Plus coordination algorithm optimizes a distributed utility function:
+
+$$
+U(\mathbf{x}) = \sum_{i=1}^n u_i(x_i, \{x_j : j \in N_i\})
+$$
+
+Where $x_i$ represents the instruction for agent $i$, and $N_i$ denotes the dynamic neighborhood determined by the orchestrator.
+
+The message-passing updates follow:
+
+$$
+m_{i \to j}^{(t+1)} = \max_{x_i} \left[ u_i(x_i, \mathbf{x}_{N_i \setminus j}) + \sum_{k \in N_i \setminus j} m_{k \to i}^{(t)} \right]
+$$
+
 ## Key Implications for Multi-LLM Systems
 
 1. Anytime Responses: The Max-Plus/MCTS combination enables a useful partial solution at every step. Even with a limited execution window, the system can provide coherent intermediate outputs essential for real-time interfaces and latency-sensitive applications.
@@ -87,8 +104,21 @@ Before diving into the case studies, a few practical notes:
 - **Evaluator is not an LLM** We implement the ‘Evaluator’ as a class for convenience, but it does not wrap an LLM; it just calls [dspy.Evaluate](https://dspy.ai/api/evaluation/Evaluate/) on the dev/test set as appropriate.
 
 
+## Experiment 1: Multi-Agent Instruction Tuning
 
-## Interactive System Visualization
+This section presents illustrative experiments that demonstrate key principles and ideas from our paper in using multiple agents to tune instructions for a base LLM, i.e., improve its performance on a task solely by optimizing the instruction prompt. Our goal is not to develop an optimal approach for this problem, but rather to highlight the mechanics and potential benefits of dynamic coordination graphs in easily interpretable settings. 
+
+### Multi-LLM Setup
+
+There are three kinds of agents here in order of increasing complexity. We did this to highlight how our ideas can work in a heterogeneous systems with different tradeoffs:
+
+- **Base LLM (gpt-3.5/haiku3)** The frozen LLM whose instructions need to be optimized. A bonus of setting this to the cheapest/least capable models is that the benchmarks are not already saturated.
+- **Proposal Agent (gpt4o-mini)** Mid-level agents that will generate the candidate instructions. The number of such agents is a key system parameter that can balance between more diversity and more computation/communication complexity. We use 5 agents for all our experiments.
+- **Orchestrator (gpt4o)** Coordinates the proposal agents and gives feedback to improve instructions.
+
+
+
+### Interactive System Visualization
 
 The visualization below demonstrates the dynamic coordination graph where agents collaborate to optimize instruction prompts. Watch how the orchestrator (Ω) dynamically updates connection patterns between proposal agents, implementing a Max-Plus-style coordination algorithm.
 
@@ -107,7 +137,13 @@ The visualization below demonstrates the dynamic coordination graph where agents
       <article className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden max-w-4xl mx-auto">
         <div className="article-content p-8 sm:p-12 font-crimson text-gray-800 text-lg leading-relaxed prose prose-lg max-w-none prose-headings:font-inter prose-headings:tracking-tight prose-h1:text-4xl prose-h1:lg:text-5xl prose-h1:font-bold prose-h1:mb-8 prose-h1:text-gray-900 prose-h2:text-2xl prose-h2:lg:text-3xl prose-h2:font-semibold prose-h2:mt-12 prose-h2:mb-6 prose-h2:pb-3 prose-h2:border-b prose-h2:border-gray-200 prose-h2:text-gray-800 prose-h3:text-xl prose-h3:lg:text-2xl prose-h3:font-semibold prose-h3:mt-8 prose-h3:mb-4 prose-h3:text-gray-700 prose-p:mb-6 prose-p:text-gray-700 prose-p:leading-relaxed prose-code:font-mono prose-code:bg-gray-100 prose-code:px-2 prose-code:py-1 prose-code:rounded-md prose-code:text-sm prose-code:font-medium prose-code:text-amber-700 prose-code:border prose-code:border-gray-200 prose-pre:bg-gray-900 prose-pre:rounded-xl prose-pre:my-8 prose-pre:shadow-lg prose-pre:code:block prose-pre:code:p-6 prose-pre:code:bg-transparent prose-pre:code:border-0 prose-pre:code:rounded-none prose-pre:code:text-sm prose-pre:code:leading-relaxed prose-pre:code:text-gray-200 prose-pre:code:font-normal prose-ul:my-6 prose-ul:pl-8 prose-ol:my-6 prose-ol:pl-8 prose-li:mb-3 prose-li:leading-relaxed prose-a:text-blue-600 prose-a:font-medium prose-a:no-underline prose-a:transition-colors prose-a:duration-200 hover:prose-a:text-blue-800 hover:prose-a:underline prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-6 prose-blockquote:my-8 prose-blockquote:italic prose-blockquote:text-gray-600 prose-blockquote:bg-slate-50 prose-blockquote:p-6 prose-blockquote:rounded-lg">
 
-## Algorithm Details
+### Algorithm Details
+
+Proposal agents iteratively generate and refine instructions. For each proposed instruction, the evaluator E provides a noisy but inexpensive utility signal by evaluating the base LLM with those instructions on randomly chosen minibatches (default size: 50) from a validation set. Then, the orchestrator (Ω) decides:
+
+- Which agent pairs should exchange information. We set the maximum number of neighbors of any agent in the coordination graph to 2; this parameter controls the coordination complexity.
+- What type of feedback (natural-language hints or critiques) each agent receives.
+
 
 The iterative refinement process follows this structure:
 
@@ -124,34 +160,114 @@ for round in range(N_ROUNDS):
         agent.current_score = E.evaluate_instruction(agent.current_instruction)
 ```
 
-## Key Concepts Illustrated
+### Key Concepts Illustrated
 
-### Dynamic Coordination Graph
-The orchestrator continuously updates interaction patterns (edges), keeping coordination efficient without exploding computational costs. Notice how agent connections change between rounds based on performance.
+- **Dynamic Coordination Graph:** The orchestrator continuously updates interaction patterns (edges), keeping coordination efficient without exploding computational costs. Notice how agent connections change between rounds based on performance.
 
-### Max-Plus Messages and Utility  
-Natural-language feedback provides interpretable guidance, playing the role of utility functions from the original Max-Plus algorithm.
+- **Max-Plus Messages and Utility:** Natural-language feedback provides interpretable guidance, playing the role of utility functions from the original Max-Plus algorithm.
 
-### Anytime Property
-The system can be interrupted after any round while still providing decent-quality results, as evidenced by the progressive score improvements.
+- **Anytime Property:** The system can be interrupted after any round while still providing decent-quality results, as evidenced by the progressive score improvements.
 
-## Mathematical Foundation
+The appendix has a partial output trace of this setup on one simple example of instruction tuning for mathematical reasoning problems. It focuses on the feedback and shows the improvement after each round.
 
-The Max-Plus coordination algorithm optimizes a distributed utility function:
+### Evaluation Setup
 
-$$
-U(\mathbf{x}) = \sum_{i=1}^n u_i(x_i, \{x_j : j \in N_i\})
-$$
+After each round, the current top-performing prompt is re-evaluated on a held-out test set. We use three datasets for this evaluation:  [GSM8k](https://dspy.ai/deep-dive/data-handling/built-in-datasets/), and two datasets from the [MetaPrompting](https://github.com/suzgunmirac/meta-prompting) paper, Multi-step arithmetic and Geometric Shapes. We compare our approach against three baselines:
 
-Where $x_i$ represents the instruction for agent $i$, and $N_i$ denotes the dynamic neighborhood determined by the orchestrator.
+- **Vanilla:** Base LLM without prompt optimization.
+- **MIPRO-v2** [DSPy’s inbuilt optimizer](https://dspy.ai/api/optimizers/MIPROv2/) for instruction and few-shot example tuning. We use the light mode, which is most comparable to our approach in terms of total computation and token budget.
+- **Chain of Thought (CoT):** Standard zero-shot reasoning prompt. _We had trouble getting [dspy.ChainOfThought](https://dspy.ai/api/modules/ChainOfThought/) to parse properly_–we were getting worse results than vanilla for all tasks–so we report numbers from other papers to still enable some comparison.
 
-The message-passing updates follow:
 
-$$
-m_{i \to j}^{(t+1)} = \max_{x_i} \left[ u_i(x_i, \mathbf{x}_{N_i \setminus j}) + \sum_{k \in N_i \setminus j} m_{k \to i}^{(t)} \right]
-$$
+### Results Overview
 
-## Performance Analysis
+| Task                  | Round 0 | Round 1 | Round 2 | Vanilla | MIPRO-v2 (light) | CoT*                       |
+|----------------------|:-------:|:-------:|:-------:|:------:|:----------------:|----------------------------|
+| **GSM8k (gpt-3.5)**  | 61.3%   | **77.9%** | 74.7% | 62.7%  | 70.05             | 73.3%[^1]                  |
+| **Multi-Step (gpt-3.5)** | 60.0%   | 59.2%   | **70.4%**   | 51.2%  | 59.2%             | N/A (83.2% with gpt-4)[^2] |
+| **Shapes (haiku-3)** | 44.8%   | 52%     | **52.8%**   | 35.2%  | 36.0%             | N/A (69.2 with gpt-4)[^2]  |
+
+[^1]: HMAW Paper, Table 2  
+[^2]: Meta-Prompting, Table 1 (with GPT-4, significantly better than gpt-3.5)
+
+
+Broadly, our instruction-tuned base LLMs are competitive with established methods such as MIPRO-v2 and Chain-of-Thought. Also, the iterative refinement typically maintains or modestly improves performance between rounds, highlighting its flexibility. _The one exception is between rounds 2 and 3 for GSM8k, where performance on the test set drops slightly_. This is likely due to the noisy utility of the minibatch on the validation set. Post-processing logic could reject the solution after round n+1 if it is worse than round n.
+
+
+### Practical Insights/Connections
+
+Recent works, such as [MultiPrompter](https://arxiv.org/abs/2310.16730), [Mixture-of-Expert Prompts](https://arxiv.org/abs/2407.00256), and [HMAW](https://arxiv.org/abs/2405.20252), also explore multi-agent or multi-prompt optimization scenarios. MultiPrompter employs reinforcement learning for cooperative prompt construction; Mixture-of-Expert Prompts uses clustering for assigning specialized prompt experts; HMAW uses a fixed hierarchy of LLM roles (CEO → Manager → Worker) to generate and then apply a single refined prompt in a one-shot, zero‐training pipeline. Our approach differs by having an explicit coordination graph that evolves based on intermediate outcomes, providing a highly flexible and scalable structure suitable for real-time and adaptive applications. Of course, both the prompt tuning and multi-LLM spaces are evolving quickly, so an exhaustive and up-to-date related work review is out of scope here.
+
+
+Dynamic and decentralized coordination is critical for real-world production settings. For instance, in complex longform applications like Deep Research or [narratives](https://arxiv.org/abs/2410.02603), specialized section agents can exchange succinct context summaries, blockers, and critical questions, enabling the orchestrator to make quick decisions without parsing extensive documentation. Similarly, in software development tasks where precision, correctness, and consistency are crucial, dynamically coordinated LLM-based agents can maintain global consistency by rapidly communicating partial results and relevant contextual feedback.
+
+## Experiment 2: Adaptive Divide-and-Conquer Arithmetic
+
+In the second experiment, we explore interleaving dynamic decomposition and coordination in multi-step computational tasks. We focus on arithmetic expressions as a simplified yet clear analogue of complex multi-LLM production tasks, which have clear intermediate and final states, and require balancing efficiency and quality.
+
+Given a multi-step arithmetic expression, e.g., ((1 + 0 + 2 - 4) + (-9 + 6 * -5 + 8)),  the orchestrator dynamically decomposes the computations and delegates them to specialized sub-problem agents to solve. In doing so, our workflow demonstrates adaptive task decomposition, visible intermediate progress, and anytime interruptibility (again simulated through the rounds).
+
+### Multi-LLM Setup
+
+This example uses two kinds of LLMs, one more expensive and the other cheaper and token-constrained. The former coordinates computation without performing arithmetic itself:
+
+- **Decomposer (o3-mini)** identifies binary sub-expressions for parallel evaluation and returns a precise, structured substitution plan using placeholders.
+- **Sub-problem agents (gpt-4o-mini-250)** are intentionally constrained to single-operator expressions, reflecting the real-world pattern of leveraging specialized, token-efficient agents for routine subtasks.
+- **Substitutor (o3-mini)** systematically merges sub-solver results back into the main expression following the structured substitution plan, clearly indicating whether further decomposition is needed.
+
+
+### How it works
+
+Given the original problem, the decomposer, sub-solvers, and substitutor work together to make progress towards the solution:
+
+**(TODO) jkg make nice algorithm box**
+
+Our approach adapts the coordination graph in real-time, adjusting sub-tasks based on immediate computation needs. Each iteration yields a partially solved, progressively simplified expression, illustrating anytime computation clearly.
+
+### Evaluation Setup
+
+Compared to the first set on prompt optimization, this set of experiments is more illustrative and qualitative rather than quantitatively detailed. We want our approach to demonstrate several desirable properties–dynamic task decomposition, scalable coordination, anytimeness–without sacrificing solution quality and with potentially better operational cost than a single reasoning agent without any multi-agent principles.
+
+We constructed a dataset of 200 long arithmetic problems by composing pairs of multi-step arithmetic expressions sourced from the MetaPrompting dataset. Our approach involves the orchestrator (GPT-o3-mini) managing task decomposition and substitution, and multiple sub-problem agents (GPT-4o-mini-250) performing minimal arithmetic computations. Here’s one example, with the intermediate results after each round:
+
+_Problem_
+
+((1 + 0 + 2 - 4) + (-9 + 6 * -5 + 8)) = -32
+
+_Answers after round_
+
+**Round 0:** 1 - 2 - 9 - 30 + 8
+
+**Round 1:** 1 - 11 - 22
+
+**Final:** -32
+
+The baseline here is to just solve each expression end-to-end using GPT-o3-mini alone, after which we can compare the total effective token count/cost for either approach. For the above example (full trace in the appendix), we find that the baseline reasoning trace uses 142 o3-mini tokens, while our approach uses 124 o3-mini and 45 4o-mini tokens. At the time of writing, each o3-mini token costs 7x that of 4o-mini, which makes the effective cost of our approach 124 + 45//7 ~ 130.6 o3-mini tokens (compared to 142), a savings of  ~8%.
+
+As you can see from the trace, the token count for our approach makes some generous assumptions about what inter-agent communication is essential and what we can make implicit through dspy type signatures and enforcement. But there are two caveats to this caveat! First, we did not go out of our way to optimize inter-agent communications for these examples. Second, and more importantly, the room for improvement in the token efficiency advantage is only likely to increase as one moves to larger-scale, production-grade tasks.
+
+
+Both methods correctly solved all the 200 arithmetic problems we gave them, so there was no drop in quality with our approach. While we did not perform exhaustive quantitative token comparisons, a few spot checks indicated that the total effective token cost of our approach, like the example in the appendix, remained competitive and slightly lower (with our assumptions) than that of the single o3-mini reasoning agent.
+
+
+## Practical Insights/Connections
+
+Our approach relates to several recent and more rigorously evaluated methods that also address dynamic task decomposition and multi-agent interactions. [Atom of Thoughts](https://arxiv.org/abs/2502.12018) focuses on simplifying test-time reasoning by decomposing complex questions into independent atomic subquestions with Markovian properties, optimizing reasoning efficiency by avoiding accumulated historical information. [Forest-of-Thought](https://arxiv.org/abs/2412.09078) leverages multiple reasoning paths and dynamic self-correction to improve accuracy and efficiency in solving complex logical problems. [Magentic-One](https://arxiv.org/abs/2411.04468) uses a multi-agent architecture with an orchestrator dynamically coordinating specialized agents to handle diverse tasks, highlighting flexibility in agent collaboration without additional tuning or training.
+
+Our illustration is focused on explicitly integrating dynamic coordination graphs with anytime interruptibility, drawing heavily from our original paper. It combines adaptive spawning of specialized agents and dynamic task decomposition, showing clear intermediate progress interruptibility. These distinctive features are particularly relevant in current real-world multi-LLM applications. In long-form document generation and complex deep research tasks, balancing token budgets and cost while ensuring high-quality output is crucial. In computer operator AI agent systems, task decomposition, specialized agent spawning, and interruptibility can significantly enhance the robustness, responsiveness, and overall efficiency of distributed task execution.
+
+
+## Why this all matters
+
+Building practical and effective multi-LLM systems will likely require drawing on the [extensive body of knowledge](https://www.masfoundations.org/) developed over decades by the multi-agent planning, coordination, and reinforcement learning communities. While much of this prior work was validated on simplified agent settings, our illustrative experiments suggest that these core ideas—in our case, scalable anytime coordination of heterogeneous teams—can translate meaningfully when applied to more capable LLM-based agents. By adapting our own max-plus orchestration approach, we showed one way these techniques can support more flexible, efficient, and interruptible multi-LLM workflows. Of course, the key challenge lies in carefully adapting these ideas and others from the multi-agent systems community for production-grade domains like research writing, software development, or OS-level automation, where the stakes are higher, and where thoughtful design choices will determine their practical value.
+
+
+_We’d love to hear your thoughts and comments—reach us at shushman@cs.stanford.edu and mail@rejuvyesh.com._
+
+# Appendix 
+
+<!-- Commenting below from earlier draft>
+<!-- ## Performance Analysis
 
 ### Experimental Setup
 - **Base Models**: GPT-3.5-turbo, Claude-3-haiku  
@@ -173,7 +289,7 @@ This work demonstrates several key principles relevant to current LLM system des
 - **Scalability**: Dynamic graphs maintain $O(n)$ communication complexity
 - **Interpretability**: Natural language messages enable human oversight  
 - **Robustness**: Anytime termination provides graceful degradation
-- **Efficiency**: Mid-tier models can effectively coordinate high-performance systems
+- **Efficiency**: Mid-tier models can effectively coordinate high-performance systems -->
 
 ## Additional Interactive Examples
 
