@@ -125,15 +125,13 @@ The visualization below demonstrates the dynamic coordination graph where agents
         </div>
       </article>
       
-      <div className="breakout-figure my-16">
-        <div className="bg-gradient-to-br from-slate-50 to-white p-8 lg:p-12 rounded-xl border border-slate-200 shadow-sm max-w-6xl mx-auto">
-          <MultiAgentVisualization />
-          <div className="font-inter text-sm text-slate-600 mt-6 italic leading-relaxed text-center max-w-4xl mx-auto">
-            Figure 1: Interactive visualization of the multi-agent instruction tuning system. Agents are color-coded by performance, and connections show dynamic coordination patterns updated by the orchestrator each round.
-          </div>
+      <div className="breakout-figure my-16 max-w-6xl mx-auto">
+        <MultiAgentVisualization />
+        <div className="font-inter text-sm text-slate-600 mt-6 italic leading-relaxed text-center px-4">
+          Figure 2: Interactive visualization of the multi-agent instruction tuning system. Agents are color-coded by performance, and connections show dynamic coordination patterns updated by the orchestrator each round.
         </div>
       </div>
-      
+
       <article className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden max-w-4xl mx-auto">
         <div className="article-content p-8 sm:p-12 font-crimson text-gray-800 text-lg leading-relaxed prose prose-lg max-w-none prose-headings:font-inter prose-headings:tracking-tight prose-h1:text-4xl prose-h1:lg:text-5xl prose-h1:font-bold prose-h1:mb-8 prose-h1:text-gray-900 prose-h2:text-2xl prose-h2:lg:text-3xl prose-h2:font-semibold prose-h2:mt-12 prose-h2:mb-6 prose-h2:pb-3 prose-h2:border-b prose-h2:border-gray-200 prose-h2:text-gray-800 prose-h3:text-xl prose-h3:lg:text-2xl prose-h3:font-semibold prose-h3:mt-8 prose-h3:mb-4 prose-h3:text-gray-700 prose-p:mb-6 prose-p:text-gray-700 prose-p:leading-relaxed prose-code:font-mono prose-code:bg-gray-100 prose-code:px-2 prose-code:py-1 prose-code:rounded-md prose-code:text-sm prose-code:font-medium prose-code:text-amber-700 prose-code:border prose-code:border-gray-200 prose-pre:bg-gray-900 prose-pre:rounded-xl prose-pre:my-8 prose-pre:shadow-lg prose-pre:code:block prose-pre:code:p-6 prose-pre:code:bg-transparent prose-pre:code:border-0 prose-pre:code:rounded-none prose-pre:code:text-sm prose-pre:code:leading-relaxed prose-pre:code:text-gray-200 prose-pre:code:font-normal prose-ul:my-6 prose-ul:pl-8 prose-ol:my-6 prose-ol:pl-8 prose-li:mb-3 prose-li:leading-relaxed prose-a:text-blue-600 prose-a:font-medium prose-a:no-underline prose-a:transition-colors prose-a:duration-200 hover:prose-a:text-blue-800 hover:prose-a:underline prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-6 prose-blockquote:my-8 prose-blockquote:italic prose-blockquote:text-gray-600 prose-blockquote:bg-slate-50 prose-blockquote:p-6 prose-blockquote:rounded-lg">
 
@@ -264,70 +262,10 @@ Building practical and effective multi-LLM systems will likely require drawing o
 
 _We’d love to hear your thoughts and comments—reach us at shushman@cs.stanford.edu and mail@rejuvyesh.com._
 
-# Appendix 
-
-<!-- Commenting below from earlier draft>
-<!-- ## Performance Analysis
-
-### Experimental Setup
-- **Base Models**: GPT-3.5-turbo, Claude-3-haiku  
-- **Validation Sets**: 50-sample minibatches per round
-- **Evaluation Metrics**: Task-specific performance scores
-- **Rounds**: 10 iterations with dynamic graph updates
-
-### Key Findings
-
-1. **Dynamic graphs outperform static topologies** by 15-20% on average
-2. **Orchestrator feedback** crucial for convergence (vs. random messaging)  
-3. **Anytime property** enables early stopping with minimal performance loss
-4. **Heterogeneous agent capabilities** provide better exploration-exploitation balance
-
-## Practical Implications
-
-This work demonstrates several key principles relevant to current LLM system design:
-
-- **Scalability**: Dynamic graphs maintain $O(n)$ communication complexity
-- **Interpretability**: Natural language messages enable human oversight  
-- **Robustness**: Anytime termination provides graceful degradation
-- **Efficiency**: Mid-tier models can effectively coordinate high-performance systems -->
-
-## Additional Interactive Examples
-
         </div>
       </article>
-      
-      <div className="breakout-interactive my-16">
-        <div className="bg-gradient-to-br from-blue-50 to-slate-50 border border-blue-200 rounded-xl p-8 lg:p-12 shadow-sm max-w-5xl mx-auto">
-          <h3 className="mt-0 text-slate-800 border-b border-blue-200 pb-3 mb-8 font-semibold text-2xl lg:text-3xl font-inter tracking-tight text-center">Parameter Sensitivity Analysis</h3>
-          <InteractiveSlider />
-        </div>
-      </div>
-      
-      <article className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden max-w-4xl mx-auto">
-        <div className="article-content p-8 sm:p-12 font-crimson text-gray-800 text-lg leading-relaxed prose prose-lg max-w-none prose-headings:font-inter prose-headings:tracking-tight prose-h1:text-4xl prose-h1:lg:text-5xl prose-h1:font-bold prose-h1:mb-8 prose-h1:text-gray-900 prose-h2:text-2xl prose-h2:lg:text-3xl prose-h2:font-semibold prose-h2:mt-12 prose-h2:mb-6 prose-h2:pb-3 prose-h2:border-b prose-h2:border-gray-200 prose-h2:text-gray-800 prose-h3:text-xl prose-h3:lg:text-2xl prose-h3:font-semibold prose-h3:mt-8 prose-h3:mb-4 prose-h3:text-gray-700 prose-p:mb-6 prose-p:text-gray-700 prose-p:leading-relaxed prose-code:font-mono prose-code:bg-gray-100 prose-code:px-2 prose-code:py-1 prose-code:rounded-md prose-code:text-sm prose-code:font-medium prose-code:text-amber-700 prose-code:border prose-code:border-gray-200 prose-pre:bg-gray-900 prose-pre:rounded-xl prose-pre:my-8 prose-pre:shadow-lg prose-pre:code:block prose-pre:code:p-6 prose-pre:code:bg-transparent prose-pre:code:border-0 prose-pre:code:rounded-none prose-pre:code:text-sm prose-pre:code:leading-relaxed prose-pre:code:text-gray-200 prose-pre:code:font-normal prose-ul:my-6 prose-ul:pl-8 prose-ol:my-6 prose-ol:pl-8 prose-li:mb-3 prose-li:leading-relaxed prose-a:text-blue-600 prose-a:font-medium prose-a:no-underline prose-a:transition-colors prose-a:duration-200 hover:prose-a:text-blue-800 hover:prose-a:underline prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-6 prose-blockquote:my-8 prose-blockquote:italic prose-blockquote:text-gray-600 prose-blockquote:bg-slate-50 prose-blockquote:p-6 prose-blockquote:rounded-lg">
 
-        </div>
-      </article>
-      
-      <div className="breakout-figure my-16">
-        <div className="bg-gradient-to-br from-slate-50 to-white p-8 lg:p-12 rounded-xl border border-slate-200 shadow-sm max-w-6xl mx-auto">
-          <MathVisualization />
-          <div className="font-inter text-sm text-slate-600 mt-6 italic leading-relaxed text-center max-w-4xl mx-auto">
-            Figure 2: Mathematical relationship visualization for sensitivity analysis.
-          </div>
-        </div>
-      </div>
-      
-      <article className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden max-w-4xl mx-auto">
-        <div className="article-content p-8 sm:p-12 font-crimson text-gray-800 text-lg leading-relaxed prose prose-lg max-w-none prose-headings:font-inter prose-headings:tracking-tight prose-h1:text-4xl prose-h1:lg:text-5xl prose-h1:font-bold prose-h1:mb-8 prose-h1:text-gray-900 prose-h2:text-2xl prose-h2:lg:text-3xl prose-h2:font-semibold prose-h2:mt-12 prose-h2:mb-6 prose-h2:pb-3 prose-h2:border-b prose-h2:border-gray-200 prose-h2:text-gray-800 prose-h3:text-xl prose-h3:lg:text-2xl prose-h3:font-semibold prose-h3:mt-8 prose-h3:mb-4 prose-h3:text-gray-700 prose-p:mb-6 prose-p:text-gray-700 prose-p:leading-relaxed prose-code:font-mono prose-code:bg-gray-100 prose-code:px-2 prose-code:py-1 prose-code:rounded-md prose-code:text-sm prose-code:font-medium prose-code:text-amber-700 prose-code:border prose-code:border-gray-200 prose-pre:bg-gray-900 prose-pre:rounded-xl prose-pre:my-8 prose-pre:shadow-lg prose-pre:code:block prose-pre:code:p-6 prose-pre:code:bg-transparent prose-pre:code:border-0 prose-pre:code:rounded-none prose-pre:code:text-sm prose-pre:code:leading-relaxed prose-pre:code:text-gray-200 prose-pre:code:font-normal prose-ul:my-6 prose-ul:pl-8 prose-ol:my-6 prose-ol:pl-8 prose-li:mb-3 prose-li:leading-relaxed prose-a:text-blue-600 prose-a:font-medium prose-a:no-underline prose-a:transition-colors prose-a:duration-200 hover:prose-a:text-blue-800 hover:prose-a:underline prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-6 prose-blockquote:my-8 prose-blockquote:italic prose-blockquote:text-gray-600 prose-blockquote:bg-slate-50 prose-blockquote:p-6 prose-blockquote:rounded-lg">
-
-## Conclusion
-
-Our multi-agent instruction tuning framework demonstrates how dynamic coordination graphs can effectively optimize LLM performance through distributed collaboration. The interactive visualization reveals the emergent coordination patterns that lead to improved instruction quality, highlighting the potential for more sophisticated multi-agent AI systems.
-
-      </div>
-    </article>
-    </div>
-  </div>
+</div>
+</div>
 </div>
 </div>
