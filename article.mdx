@@ -226,14 +226,18 @@ while not done:
     expr, done = substitutor.substitute(expr, plan, partial_results)
     log(expr)  # clearly demonstrates incremental progress at each step
 ```
+        </div>
+    </article>
 
-<div className="breakout-figure my-12 max-w-5xl mx-auto">
+<div className="breakout-figure my-12 max-w-6xl mx-auto">
   <DivideAndConquerVisualization />
   <div className="font-inter text-sm text-slate-600 mt-6 italic leading-relaxed text-center px-4">
-    Figure 4: Interactive replay of the divide-and-conquer arithmetic trace. Each round reflects the exact steps recorded in
-    <code className="font-mono">trace2.txt</code>, showing the decomposer’s plan, limited sub-problem agents, and the substitutor’s updated expression.
+    Figure 4: Interactive replay of the divide-and-conquer arithmetic trace.
   </div>
 </div>
+
+      <article className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden max-w-4xl mx-auto">
+        <div className="article-content p-8 sm:p-12 font-crimson text-gray-800 text-lg leading-relaxed prose prose-lg max-w-none prose-headings:font-inter prose-headings:tracking-tight prose-h1:text-4xl prose-h1:lg:text-5xl prose-h1:font-bold prose-h1:mb-8 prose-h1:text-gray-900 prose-h2:text-2xl prose-h2:lg:text-3xl prose-h2:font-semibold prose-h2:mt-12 prose-h2:mb-6 prose-h2:pb-3 prose-h2:border-b prose-h2:border-gray-200 prose-h2:text-gray-800 prose-h3:text-xl prose-h3:lg:text-2xl prose-h3:font-semibold prose-h3:mt-8 prose-h3:mb-4 prose-h3:text-gray-700 prose-p:mb-6 prose-p:text-gray-700 prose-p:leading-relaxed prose-code:font-mono prose-code:bg-slate-800/10 prose-code:px-2 prose-code:py-1 prose-code:rounded-md prose-code:text-sm prose-code:font-medium prose-code:text-amber-600 prose-code:border prose-code:border-slate-200 prose-pre:bg-gradient-to-br prose-pre:from-slate-950 prose-pre:via-slate-900 prose-pre:to-slate-950 prose-pre:border prose-pre:border-slate-800 prose-pre:rounded-2xl prose-pre:my-8 prose-pre:shadow-2xl prose-pre:ring-1 prose-pre:ring-slate-700/60 prose-pre:code:block prose-pre:code:p-6 prose-pre:code:bg-transparent prose-pre:code:border-0 prose-pre:code:rounded-none prose-pre:code:text-[15px] prose-pre:code:leading-relaxed prose-pre:code:text-slate-100 prose-pre:code:font-normal prose-ul:my-6 prose-ul:pl-8 prose-ol:my-6 prose-ol:pl-8 prose-li:mb-3 prose-li:leading-relaxed prose-a:text-blue-600 prose-a:font-medium prose-a:no-underline prose-a:transition-colors prose-a:duration-200 hover:prose-a:text-blue-800 hover:prose-a:underline prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-6 prose-blockquote:my-8 prose-blockquote:italic prose-blockquote:text-gray-600 prose-blockquote:bg-slate-50 prose-blockquote:p-6 prose-blockquote:rounded-lg">
 
 Our approach adapts the coordination graph in real-time, adjusting sub-tasks based on immediate computation needs. Each iteration yields a partially solved, progressively simplified expression, illustrating anytime computation clearly.
 
