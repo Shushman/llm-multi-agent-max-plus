@@ -5,6 +5,7 @@ import MultiAgentVisualization from './components/MultiAgentVisualization';
 import DistillHeader from './components/DistillHeader';
 import TableOfContents from './components/TableOfContents';
 import MultiAgentMappingVisualization from './components/MultiAgentMappingVisualization';
+import DivideAndConquerVisualization from './components/DivideAndConquerVisualization';
 
 <DistillHeader 
   title="Scalable and Anytime Coordination for Multi-LLM Systems"
@@ -225,6 +226,14 @@ while not done:
     expr, done = substitutor.substitute(expr, plan, partial_results)
     log(expr)  # clearly demonstrates incremental progress at each step
 ```
+
+<div className="breakout-figure my-12 max-w-5xl mx-auto">
+  <DivideAndConquerVisualization />
+  <div className="font-inter text-sm text-slate-600 mt-6 italic leading-relaxed text-center px-4">
+    Figure 4: Interactive replay of the divide-and-conquer arithmetic trace. Each round reflects the exact steps recorded in
+    <code className="font-mono">trace2.txt</code>, showing the decomposer’s plan, limited sub-problem agents, and the substitutor’s updated expression.
+  </div>
+</div>
 
 Our approach adapts the coordination graph in real-time, adjusting sub-tasks based on immediate computation needs. Each iteration yields a partially solved, progressively simplified expression, illustrating anytime computation clearly.
 
