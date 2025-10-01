@@ -182,12 +182,14 @@ After each round, the current top-performing prompt is re-evaluated on a held-ou
 
 | Task                  | Round 0 | Round 1 | Round 2 | Vanilla | MIPRO-v2 (light) | CoT*                       |
 |----------------------|:-------:|:-------:|:-------:|:------:|:----------------:|----------------------------|
-| **GSM8k (gpt-3.5)**  | 61.3%   | **77.9%** | 74.7% | 62.7%  | 70.05             | 73.3%[^1]                  |
-| **Multi-Step (gpt-3.5)** | 60.0%   | 59.2%   | **70.4%**   | 51.2%  | 59.2%             | N/A (83.2% with gpt-4)[^2] |
-| **Shapes (haiku-3)** | 44.8%   | 52%     | **52.8%**   | 35.2%  | 36.0%             | N/A (69.2 with gpt-4)[^2]  |
+| **GSM8k (gpt-3.5)**  | 61.3%   | **77.9%** | 74.7% | 62.7%  | 70.05             | 73.3%<sup>1</sup>           |
+| **Multi-Step (gpt-3.5)** | 60.0%   | 59.2%   | **70.4%**   | 51.2%  | 59.2%             | N/A (83.2% with gpt-4)<sup>2</sup> |
+| **Shapes (haiku-3)** | 44.8%   | 52%     | **52.8%**   | 35.2%  | 36.0%             | N/A (69.2 with gpt-4)<sup>2</sup>  |
 
-[^1]: HMAW Paper, Table 2  
-[^2]: Meta-Prompting, Table 1 (with GPT-4, significantly better than gpt-3.5)
+<div className="mt-3 space-y-1 text-sm text-slate-500 leading-relaxed">
+  <p><sup>1</sup> HMAW Paper, Table 2.</p>
+  <p><sup>2</sup> Meta-Prompting, Table 1 (with GPT-4, significantly better than gpt-3.5).</p>
+</div>
 
 
 Broadly, our instruction-tuned base LLMs are competitive with established methods such as MIPRO-v2 and Chain-of-Thought. Also, the iterative refinement typically maintains or modestly improves performance between rounds, highlighting its flexibility. _The one exception is between rounds 2 and 3 for GSM8k, where performance on the test set drops slightly_. This is likely due to the noisy utility of the minibatch on the validation set. Post-processing logic could reject the solution after round n+1 if it is worse than round n.
