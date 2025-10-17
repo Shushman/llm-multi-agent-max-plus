@@ -25,7 +25,7 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true
   },
-  base: process.env.NODE_ENV === 'production' ? '/jkg-shushman/' : '/',
+  base: process.env.NODE_ENV === 'production' ? '/llm-multi-agent-max-plus/' : '/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '.')
